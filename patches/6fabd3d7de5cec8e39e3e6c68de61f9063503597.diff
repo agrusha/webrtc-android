@@ -1,0 +1,38 @@
+diff --git a/.gitignore b/.gitignore
+index 30e8d7f..9b1b0c3 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -49,6 +49,8 @@
+ /links.db
+ /mojo
+ /out
++/out_arm
++/out_x86
+ /resources/**/*.aecdump
+ /resources/**/*.bin
+ /resources/**/*.byte
+diff --git a/webrtc/api/java/src/org/webrtc/VideoTrack.java b/webrtc/api/java/src/org/webrtc/VideoTrack.java
+index a4ec8ca..c178afb 100644
+--- a/webrtc/api/java/src/org/webrtc/VideoTrack.java
++++ b/webrtc/api/java/src/org/webrtc/VideoTrack.java
+@@ -31,7 +31,6 @@ public class VideoTrack extends MediaStreamTrack {
+       return;
+     }
+     nativeRemoveRenderer(nativeTrack, renderer.nativeVideoRenderer);
+-    renderer.dispose();
+   }
+ 
+   public void dispose() {
+diff --git a/webrtc/media/engine/webrtcvoiceengine.cc b/webrtc/media/engine/webrtcvoiceengine.cc
+index 09a072a..8e8db6a 100644
+--- a/webrtc/media/engine/webrtcvoiceengine.cc
++++ b/webrtc/media/engine/webrtcvoiceengine.cc
+@@ -629,7 +629,7 @@ bool WebRtcVoiceEngine::ApplyOptions(const AudioOptions& options_in) {
+   options.auto_gain_control = rtc::Optional<bool>(false);
+   LOG(LS_INFO) << "Always disable AEC and AGC on iOS. Use built-in instead.";
+ #elif defined(ANDROID)
+-  ec_mode = webrtc::kEcAecm;
++  ec_mode = webrtc::kEcAec;
+ #endif
+ 
+ #if defined(WEBRTC_IOS) || defined(ANDROID)
